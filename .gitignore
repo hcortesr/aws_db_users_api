@@ -1,0 +1,23 @@
+# =========================
+# Terraform
+# =========================
+**/.terraform/
+**.tfstate
+**.tfstate.*
+**/terraform.tfstate.backup
+# Terraform variables containing secrets
+**.tfvars
+**.tfvars.json
+
+
+# =========================
+# Node.js
+# =========================
+backend/node_modules/
+
+
+# =========================
+# Lambda packages
+# =========================
+**.zip
+
