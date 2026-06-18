@@ -5,12 +5,12 @@ module "dynamodb" {
 }
 
 module "lambda" {
-  source = "../../modules/lambda"
+  source        = "../../modules/lambda"
   db_dynamo_arn = module.dynamodb.db_arn
 }
 module "Gateway" {
-  source = "../../modules/gateway"
+  source            = "../../modules/gateway"
   labmda_invoke_arn = module.lambda.lambda_arn
-  labmda_name = module.lambda.lambda_name
-  
+  labmda_name       = module.lambda.lambda_name
+
 }
