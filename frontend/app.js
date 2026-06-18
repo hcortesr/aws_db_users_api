@@ -111,6 +111,8 @@ async function loadPlayers() {
   }
 }
 
+
+
 async function addPlayer() {
   const name = inpName.value.trim();
   const age  = parseInt(inpAge.value, 10);
@@ -190,3 +192,5 @@ inpAge.addEventListener("keydown",  (e) => { if (e.key === "Enter") addPlayer();
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 loadPlayers();
+
+module.exports = loadPlayers;

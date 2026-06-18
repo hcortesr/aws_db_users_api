@@ -1,0 +1,66 @@
+name: Test
+
+on:
+    push: 
+    pull_request: 
+
+jobs:
+    test_frontend:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: actions/setup-node@v6
+              with:
+                node-version: 22
+
+            - name: Install dependencies
+              run: npm ci
+              working-directory: frontend/test
+
+            - name: Test frontend
+              run: npm test
+              working-directory: frontend/test
+    
+    test_backend:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: actions/setup-node@v6
+              with:
+                node-version: 22
+
+            - name: Install dependencies
+              run: npm ci
+              working-directory: backend
+
+            - name: Test backend
+              run: npm test
+              working-directory: backend
+
+    verify_infra:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - uses: actions/checkout@v7
+
+    
+            - uses: hashicorp/setup-terraform@v4
+              with:
+                terraform_version: "1.15.4"
+    
+            - name: Format
+              run: terraform fmt -check
+              working-directory: infra/environments/dev
+
+            - name: Terraform init
+              run : terraform init
+              working-directory: infra/environments/dev
+
+            - name: Terraform validate
+              run : terraform validate
+              working-directory: infra/environments/dev
+            
