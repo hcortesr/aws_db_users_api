@@ -47,6 +47,12 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.1.0
+              with:
+                aws-region: us-east-1
+                role-to-assume: ${{ secrets.AWS_ROLE }}
+
     
             - uses: hashicorp/setup-terraform@v4
               with:
