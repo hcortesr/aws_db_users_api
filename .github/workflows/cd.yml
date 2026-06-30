@@ -1,9 +1,12 @@
-name: dependencies
+name: WF_Dependencies
 
-on: 
-    workflow_run: 
-        workflows: ["Test"]
-        types: completed
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+      
 
 
 jobs:
