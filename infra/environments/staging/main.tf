@@ -5,7 +5,7 @@ terraform {
     bucket = "project-players"
     key    = "terraform.tfstate"
     region = "us-east-1"
-    use_lockfile = true
+    dynamodb_table = "project_players"
   }
 
   required_providers {
@@ -17,5 +17,5 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }

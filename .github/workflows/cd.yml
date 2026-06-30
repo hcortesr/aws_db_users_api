@@ -1,0 +1,77 @@
+name: dependencies
+
+on: 
+    workflow_run: 
+        workflows: ["Test"]
+        types: completed
+
+
+jobs:
+    build_infra:
+        runs-on: ubuntu-latest
+
+        outputs:
+            lambda_name: ${{ steps.tf_outputs.outputs.lambda_name }}
+            bucket_name: ${{ steps.tf_outputs.outputs.bucket_name }}
+
+        steps:
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.1.0
+              with:
+                aws-region: us-east-1
+                role-to-assume: ${{ secrets.AWS_ROLE }}
+
+            - uses: hashicorp/setup-terraform@v4
+              with:
+                terraform_version: "1.15.4"
+
+            - name: Terrafrom init
+              run: terraform init
+              working-directory: infra/environments/dev
+
+            - name: Terrafrom apply
+              run: terraform apply -auto-approve
+              working-directory: infra/environments/dev
+
+            - name: Terraform read outputs
+              id: tf_outputs
+              run: |
+                echo "bucket_name=$(terraform output -raw bucket_name)" >> $GITHUB_OUTPUT
+                echo "lambda_name=$(terraform output -raw lambda_name)" >> $GITHUB_OUTPUT
+                working-directory: infra/environments/dev
+              
+
+    deploy_lambda:
+
+        needs: build_infra
+        
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Create Lambda package
+              run: |
+                cd backend
+                zip -r lambda.zip lambda_backend.mjs
+              working-directory: backend
+
+            - uses: actions/upload-artifact@v7
+              with:
+                name: lambda_zip
+                path: backend/lambda.zip
+              
+
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.1.0
+              with:
+                aws-region: us-east-1
+                role-to-assume: ${{ secrets.AWS_ROLE }}
+
+            - name: Deploy Lambda Function
+              uses: aws-actions/aws-lambda-deploy@v1.1.0
+              with:
+                function-name: needs.build_infra.outputs.lambda_name
+                code-artifacts-dir: lambda_zip
+                handler: index.handler
+                runtime: nodejs22.x
+                # Add any additional inputs this action supports

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "website" {
-  bucket = "my-unique-static-website-bucket-12345"
+  bucket = "project-players-12345"
 }
 
 resource "aws_s3_bucket_website_configuration" "website" {
