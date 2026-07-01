@@ -78,3 +78,12 @@ jobs:
                 handler: lambda_backend.handler
                 runtime: nodejs22.x
                 # Add any additional inputs this action supports
+
+    deploy_s3:
+        needs: build_infra
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Upload s3
+            run: aws s3 sync frontend s3://${{needs.build_infra.outputs.lambda_name}} --exclude "tests/*"
+
