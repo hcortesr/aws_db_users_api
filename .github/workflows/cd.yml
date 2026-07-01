@@ -37,7 +37,7 @@ jobs:
               working-directory: infra/environments/dev
 
             - name: Terrafrom apply
-              run: terraform apply -auto-approve
+              run: terraform apply -auto-approve -var-file="terraform.tfvars"
               working-directory: infra/environments/dev
 
             - name: Terraform read outputs
