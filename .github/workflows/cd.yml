@@ -93,5 +93,5 @@ jobs:
               role-to-assume: ${{ secrets.AWS_ROLE }}
 
           - name: Upload s3
-            run: aws s3 sync frontend s3://${{needs.build_infra.outputs.lambda_name}} --exclude "tests/*"
+            run: aws s3 sync frontend s3://${{needs.build_infra.outputs.bucket_name}} --exclude "tests/*"
 
