@@ -6,8 +6,8 @@
 **.tfstate.*
 **/terraform.tfstate.backup
 # Terraform variables containing secrets
-**.tfvars
-**.tfvars.json
+# **.tfvars
+# **.tfvars.json
 
 
 # =========================
