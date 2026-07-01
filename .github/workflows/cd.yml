@@ -58,15 +58,11 @@ jobs:
         steps:
             - uses: actions/checkout@v7
             - name: Create Lambda package
-              run: zip -r lambda.zip lambda_backend.mjs
+              run: | 
+                mkdir build
+                mv lambda_backend.mjs build/lambda_backend.mjs
               working-directory: backend
-
-            - uses: actions/upload-artifact@v7
-              with:
-                name: lambda_zip
-                path: backend/lambda.zip
-              
-
+            
 
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v6.1.0
@@ -78,7 +74,7 @@ jobs:
               uses: aws-actions/aws-lambda-deploy@v1.1.0
               with:
                 function-name: needs.build_infra.outputs.lambda_name
-                code-artifacts-dir: lambda_zip
-                handler: index.handler
+                code-artifacts-dir: backend/build/lambda_backend.mjs
+                handler: lambda_backend.handler
                 runtime: nodejs22.x
                 # Add any additional inputs this action supports
