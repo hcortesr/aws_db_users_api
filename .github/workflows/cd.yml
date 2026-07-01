@@ -58,9 +58,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
             - name: Create Lambda package
-              run: |
-                cd backend
-                zip -r lambda.zip lambda_backend.mjs
+              run: zip -r lambda.zip lambda_backend.mjs
               working-directory: backend
 
             - uses: actions/upload-artifact@v7
