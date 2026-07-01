@@ -73,7 +73,7 @@ jobs:
             - name: Deploy Lambda Function
               uses: aws-actions/aws-lambda-deploy@v1.1.0
               with:
-                function-name: needs.build_infra.outputs.lambda_name
+                function-name: ${{needs.build_infra.outputs.lambda_name}}
                 code-artifacts-dir: backend/build
                 handler: lambda_backend.handler
                 runtime: nodejs22.x
